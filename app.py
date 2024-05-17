@@ -5,14 +5,13 @@ import numpy as np
 from PIL import Image
 
 # Load the trained model
-model = tf.keras.models.load_model('model.h5')
+model = tf.keras.models.load_model('model.h5')  # Ensure the correct path to your model file
 
-# Define class names (ensure these match your training data)
-class_names = ['Class1', 'Class2', 'Class3', 'Class4', 'Class5', 'Class6', 'Class7', 'Class8', 'Class9', 'Class10']  # Replace with actual class names
+# Define class names (Infected and Healthy)
+class_names = ['Healthy', 'Infected']  # Update this if your class names are different
 
 # Function to make predictions
-def predict(image_path):
-    img = Image.open(image_path)
+def predict(img):
     img = img.resize((256, 256))
     img_array = image.img_to_array(img)
     img_array = tf.expand_dims(img_array, 0)  # Create a batch axis
@@ -23,10 +22,10 @@ def predict(image_path):
     return predicted_class, confidence
 
 # Streamlit app
-st.title('Tomato Disease Classifier')
-st.write("Upload an image of a tomato leaf to classify its disease.")
+st.title('Tomato Leaf Disease Classifier')
+st.write("Upload an image of a tomato leaf to classify it as Infected or Healthy.")
 
-uploaded_file = st.file_uploader("Choose an image...", type="jpg")
+uploaded_file = st.file_uploader("Choose an image...", type=["jpg", "jpeg", "png"])
 
 if uploaded_file is not None:
     img = Image.open(uploaded_file)
@@ -34,6 +33,6 @@ if uploaded_file is not None:
     st.write("")
     st.write("Classifying...")
 
-    predicted_class, confidence = predict(uploaded_file)
+    predicted_class, confidence = predict(img)
     st.write(f"Predicted Class: {predicted_class}")
     st.write(f"Confidence: {confidence}%")
