@@ -5,7 +5,7 @@ import numpy as np
 from PIL import Image
 
 # Load the trained model
-model = tf.keras.models.load_model('Tomato.h5')
+model = tf.keras.models.load_model('model.h5')
 
 # Define class names (ensure these match your training data)
 class_names = ['Class1', 'Class2', 'Class3', 'Class4', 'Class5', 'Class6', 'Class7', 'Class8', 'Class9', 'Class10']  # Replace with actual class names
