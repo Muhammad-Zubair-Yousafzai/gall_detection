@@ -5,7 +5,7 @@ import numpy as np
 from PIL import Image
 
 # Load the trained model
-model = tf.keras.models.load_model('model.h5')  # Ensure the correct path to your model file
+model = tf.keras.models.load_model('model_new.h5')  # Ensure the correct path to your model file
 
 # Define class names (Infected and Healthy)
 class_names = ['Healthy', 'Infected']  # Update this if your class names are different
