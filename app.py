@@ -12,8 +12,9 @@ class_names = ['Healthy', 'Infected']  # Update this if your class names are dif
 
 # Function to make predictions
 def predict(img):
-    img = img.resize((256, 256))
+    img = img.resize((256, 256))  # Ensure this matches your training preprocessing
     img_array = image.img_to_array(img)
+    img_array = tf.keras.applications.mobilenet_v2.preprocess_input(img_array)  # Example of preprocessing; adjust if different
     img_array = tf.expand_dims(img_array, 0)  # Create a batch axis
 
     predictions = model.predict(img_array)
@@ -22,8 +23,8 @@ def predict(img):
     return predicted_class, confidence
 
 # Streamlit app
-st.title('Tomato Leaf Disease Classifier')
-st.write("Upload an image of a tomato leaf to classify it as Infected or Healthy.")
+st.title('Gall Detection')
+st.write("Upload an image of a leaf to classify it as Infected or Healthy.")
 
 uploaded_file = st.file_uploader("Choose an image...", type=["jpg", "jpeg", "png"])
 
