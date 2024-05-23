@@ -1,39 +1,48 @@
 import streamlit as st
 import tensorflow as tf
-from tensorflow.keras.preprocessing import image
-import numpy as np
+from tensorflow.keras.models import load_model
 from PIL import Image
+import numpy as np
 
 # Load the trained model
-model = tf.keras.models.load_model('model_new.h5')  # Ensure the correct path to your model file
+model = load_model('model_new1.h5')
 
-# Define class names (Infected and Healthy)
-class_names = ['Healthy', 'Infected']  # Update this if your class names are different
+# Define class names
+class_names = ['Healthy', 'Gall Detected']
+
+# Function to preprocess the uploaded image
+def preprocess_image(image):
+    image = image.resize((256, 256))
+    image = np.array(image) / 255.0
+    image = np.expand_dims(image, axis=0)
+    return image
 
 # Function to make predictions
-def predict(img):
-    img = img.resize((256, 256))  # Ensure this matches your training preprocessing
-    img_array = image.img_to_array(img)
-    img_array = tf.keras.applications.mobilenet_v2.preprocess_input(img_array)  # Example of preprocessing; adjust if different
-    img_array = tf.expand_dims(img_array, 0)  # Create a batch axis
-
-    predictions = model.predict(img_array)
+def predict(model, image):
+    predictions = model.predict(image)
     predicted_class = class_names[np.argmax(predictions[0])]
     confidence = round(100 * (np.max(predictions[0])), 2)
     return predicted_class, confidence
 
 # Streamlit app
-st.title('Gall Detection')
-st.write("Upload an image of a leaf to classify it as Infected or Healthy.")
+st.title("Leaf Disease Detection")
 
+st.write("Upload an image of a leaf and the model will predict whether it's healthy or infected with Gall.")
+
+# Image upload
 uploaded_file = st.file_uploader("Choose an image...", type=["jpg", "jpeg", "png"])
 
 if uploaded_file is not None:
-    img = Image.open(uploaded_file)
-    st.image(img, caption='Uploaded Image.', use_column_width=True)
+    image = Image.open(uploaded_file)
+    st.image(image, caption='Uploaded Image', use_column_width=True)
     st.write("")
     st.write("Classifying...")
 
-    predicted_class, confidence = predict(img)
-    st.write(f"Predicted Class: {predicted_class}")
+    # Preprocess the image
+    processed_image = preprocess_image(image)
+
+    # Make prediction
+    predicted_class, confidence = predict(model, processed_image)
+
+    st.write(f"Predicted class: {predicted_class}")
     st.write(f"Confidence: {confidence}%")
