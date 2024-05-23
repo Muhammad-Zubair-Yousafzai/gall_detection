@@ -5,7 +5,7 @@ from PIL import Image
 import numpy as np
 
 # Load the trained model
-model = load_model('model_new1.h5')
+model = load_model('model_new.h5')
 
 # Define class names
 class_names = ['Healthy', 'Gall Detected']
