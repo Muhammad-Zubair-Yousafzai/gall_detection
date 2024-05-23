@@ -46,3 +46,4 @@ if uploaded_file is not None:
 
     st.write(f"Predicted class: {predicted_class}")
     st.write(f"Confidence: {confidence}%")
+
